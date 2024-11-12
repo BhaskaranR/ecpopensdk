@@ -1,0 +1,15 @@
+{
+  "name": "ecp-open-sdk",
+  "version": "1.0.0",
+  "description": "This project provides a detailed guide for building and using a custom Embedded Collaboration Platform (ECP) SDK with Symphony.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx open-cli http://127.0.0.1:8080/public/index.html & npx http-server . -a 127.0.0.1 -p 8080"
+  },
+  "author": "Symphony",
+  "license": "ISC",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "open-cli": "^8.0.0"
+  }
+}

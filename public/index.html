@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title>ECP Open SDK example</title>
+
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+
+    <!-- Symphony styling -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.symphony.com/resources/ui-toolkit/v4.3.2/css/uitoolkit.css"
+    />
+    <!-- Additional styling -->
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link rel="stylesheet" type="text/css" href="chat-window.css" />
+    <link rel="stylesheet" type="text/css" href="header.css" />
+    <link rel="stylesheet" type="text/css" href="launcher.css" />
+  </head>
+
+  <body id="page-container" class="dark tk-text-color">
+    <div class="vertical no-shrink">
+
+      <div class="panel">
+                <h2 class="tk-typography tk-typography--h2 tk-mb-1">Actions</h2>
+
+                <div>
+                    <button disabled class="tk-button tk-button--primary disable-if-no-main"
+                        onclick="window.sdk.onMessageNotification((n) => alert('Stream message notification: ' + JSON.stringify(n)), getStreamId())">
+                        Listen to stream new messages
+                    </button>
+                </div>
+                <div>
+                    <button disabled class="tk-button tk-button--primary disable-if-no-main"
+                        onclick="window.sdk.onMessageNotification((n) => alert('Global message notification: ' +JSON.stringify(n)))">
+                        Listen to any new message
+                    </button>
+                </div>
+                <div>
+                    <button disabled class="tk-button tk-button--primary disable-if-no-main"
+                        onclick="window.sdk.onUnreadCountNotification((n) => alert('Stream message count notification: ' + JSON.stringify(n)), getStreamId())">
+                        Listen to stream unread message count
+                    </button>
+                </div>
+
+                <div>
+                    <button disabled class="tk-button tk-button--primary disable-if-no-main"
+                        onclick="window.sdk.onUnreadCountNotification((n) => alert('Global message count notification: ' + JSON.stringify(n)))">
+                        Listen to any unread message count
+                    </button>
+                </div>
+            </div>
+        </div>
+    <script>
+      // DOM helpers
+      const getPodUrl = () => `https://develop2.symphony.com`;
+      const getPartnerId = () => null;
+      const getStreamId = () => `0UbMs0SfTxKAQL2GdAa0JH///m2ZuWMTdA==`;
+
+      // SDK configuration
+      const configureSDK = () => {
+        window.sdk.configuration = {
+          podUrl: getPodUrl(),
+          partnerId: getPartnerId(),
+          onReady: () => {
+            // enable all SDK actions
+            document
+              .querySelectorAll(".disable-if-no-main")
+              .forEach((el) => el.removeAttribute("disabled"));
+            // disabled configuration fields
+            document
+              .querySelectorAll(".disable-on-main")
+              .forEach((el) => el.setAttribute("disabled", "true"));
+          },
+        };
+      };
+    </script>
+
+    <!-- SDK injection -->
+    <script src="./sdk.js"></script>
+    <script type="module">
+      import Launcher from "./launcher.js";
+
+      function initLauncher() {
+
+        const launcher = new Launcher();
+        const container = document.getElementById("page-container");
+        if (container) {
+          launcher.mount(container);
+
+          configureSDK();
+          window.sdk.openStream(getStreamId(), "symphony-main-frame-container");
+        }
+        // remove event listener
+        document.removeEventListener("DOMContentLoaded", initLauncher);
+
+      }
+
+      document.addEventListener("DOMContentLoaded", initLauncher);
+    </script>
+  </body>
+</html>
